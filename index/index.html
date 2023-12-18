@@ -1,1 +1,135 @@
-Hello World!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musical Flashcard Game</title>
+    <style>
+        body {
+            background-color: #282c35; /* Dark background color */
+            color: #fff; /* Light text color */
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            color: #61dafb; /* Light blue header text color */
+        }
+
+        #question {
+            color: #61dafb; /* Light blue question text color */
+        }
+
+        button {
+            background-color: #61dafb; /* Light blue button background color */
+            color: #282c35; /* Dark button text color */
+            margin: 5px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #answerMessage {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #61dafb; /* Light blue answer message text color */
+        }
+    </style>
+</head>
+<body>
+    <h2>Musical Flashcard Game</h2>
+    <div id="question">
+        <!-- Question will be displayed here -->
+    </div>
+
+    <button onclick="checkAnswer('Ionian')">Ionian</button>
+    <button onclick="checkAnswer('Dorian')">Dorian</button>
+    <button onclick="checkAnswer('Phrygian')">Phrygian</button>
+    <button onclick="checkAnswer('Lydian')">Lydian</button>
+    <button onclick="checkAnswer('Mixolydian')">Mixolydian</button>
+    <button onclick="checkAnswer('Aeolian')">Aeolian</button>
+    <button onclick="checkAnswer('Locrian')">Locrian</button>
+    
+    <div id="answerMessage">
+        <!-- Answer will be displayed here -->
+    </div>
+
+    <script>
+        const modes = ['Ionian', 'Dorian', 'Phrygian', 'Lydian', 'Mixolydian', 'Aeolian', 'Locrian'];
+        const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+        const modeValues = { 'Ionian': 0, 'Dorian': 2, 'Phrygian': 4, 'Lydian': 5, 'Mixolydian': 7, 'Aeolian': 9, 'Locrian': 11 };
+        const intervalNames = {
+            0: 'Unison',
+            1: 'Minor 2nd',
+            2: 'Major 2nd',
+            3: 'Minor 3rd',
+            4: 'Major 3rd',
+            5: 'Perfect 4th',
+            6: 'Tritone',
+            7: 'Perfect 5th',
+            8: 'Minor 6th',
+            9: 'Major 6th',
+            10: 'Minor 7th',
+            11: 'Major 7th'
+        };
+    
+        let currentNote;
+        let currentMode;
+        let interval;
+    
+        function getRandomNote() {
+            return notes[Math.floor(Math.random() * notes.length)];
+        }
+    
+        function getRandomMode() {
+            return modes[Math.floor(Math.random() * modes.length)];
+        }
+    
+        function getNoteByInterval(baseNote, interval) {
+            let noteIndex = notes.indexOf(baseNote);
+            let newNoteIndex = (noteIndex + interval) % 12;
+            return notes[newNoteIndex];
+        }
+    
+        function getModeByInterval(baseMode, interval) {
+            let currentModeValue = modeValues[baseMode];
+            let newModeValue = (currentModeValue + interval) % 12;
+    
+            for (let mode in modeValues) {
+                if (modeValues[mode] === newModeValue) return mode;
+            }
+        }
+    
+        function isValidInterval(baseMode, interval) {
+            return modes.includes(getModeByInterval(baseMode, interval));
+        }
+    
+        function generateQuestion() {
+            currentNote = getRandomNote();
+            currentMode = getRandomMode();
+            interval = Math.floor(Math.random() * 12);
+    
+            while (!isValidInterval(currentMode, interval)) {
+                interval = Math.floor(Math.random() * 12);
+            }
+    
+            document.getElementById('question').innerHTML = `Starting from ${currentNote} ${currentMode}, move up by a ${intervalNames[interval]}. What's the resultant mode?`;
+        }
+    
+        function checkAnswer(mode) {
+            let expectedMode = getModeByInterval(currentMode, interval);
+            let expectedNote = getNoteByInterval(currentNote, interval);
+    
+            if (mode === expectedMode) {
+                document.getElementById('answerMessage').textContent = `Correct! The note is ${expectedNote} ${expectedMode}.`;
+            } else {
+                document.getElementById('answerMessage').textContent = `Wrong! The correct note is ${expectedNote} ${expectedMode}.`;
+            }
+    
+            generateQuestion();
+        }
+    
+        generateQuestion();
+    </script>
+</body>
+</html>
