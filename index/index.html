@@ -107,13 +107,13 @@
         function generateQuestion() {
             currentNote = getRandomNote();
             currentMode = getRandomMode();
-            interval = Math.floor(Math.random() * 12);
+            interval = Math.floor(Math.random() * 11) + 1;
     
             while (!isValidInterval(currentMode, interval)) {
-                interval = Math.floor(Math.random() * 12);
+                interval = Math.floor(Math.random() * 11) + 1;
             }
     
-            document.getElementById('question').innerHTML = `Starting from ${currentNote} ${currentMode}, move up by a ${intervalNames[interval]}. What's the resultant mode?`;
+            document.getElementById('question').innerHTML = `Starting from <span style="color: #ffffff">${currentNote} ${currentMode}</span>, move up by a <span style="color: #ffffff">${intervalNames[interval]}</span>. What's the resultant mode?`;
         }
     
         function checkAnswer(mode) {
@@ -121,9 +121,9 @@
             let expectedNote = getNoteByInterval(currentNote, interval);
     
             if (mode === expectedMode) {
-                document.getElementById('answerMessage').textContent = `Correct! The note is ${expectedNote} ${expectedMode}.`;
+                document.getElementById('answerMessage').innerHTML = `Correct! The note is <span style="color: #ffffff">${expectedNote} ${expectedMode}</span>.`;
             } else {
-                document.getElementById('answerMessage').textContent = `Wrong! The correct note is ${expectedNote} ${expectedMode}.`;
+                document.getElementById('answerMessage').innerHTML = `Wrong! The correct note is <span style="color: #ffffff">${expectedNote} ${expectedMode}</span>.`;
             }
     
             generateQuestion();
